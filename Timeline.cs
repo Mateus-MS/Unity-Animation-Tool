@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Shapes;
 
-public class Timeline : MonoBehaviour
+[ExecuteAlways]
+public class Timeline : ImmediateModeShapeDrawer
 {
     [Range(0f, 1f)]
     public float progress = 0f;
@@ -57,7 +59,7 @@ public class Timeline : MonoBehaviour
                 anim.End = anim.Start + anim.Duration;
                 break;
         }
-        
+
         this.animations.Add(anim);
 
         foreach (var a in animations)
@@ -67,22 +69,30 @@ public class Timeline : MonoBehaviour
         }
     }
 
-    public void Update()
+    public override void DrawShapes(Camera cam)
     {
-        foreach (var anim in this.animations)
+        if (Application.isPlaying)
         {
-            if (anim is Animation animation)
-            {
-                float t = Mathf.InverseLerp(animation.NormalizedStart, animation.NormalizedEnd, this.progress);
-                t = Mathf.Clamp01(t);
-                animation.onUpdate?.Invoke(animation.Easing(t));
-            }
-            else if (anim is AnimationGroup group)
-            {
-                float t = Mathf.InverseLerp(group.NormalizedStart, group.NormalizedEnd, this.progress);
-                t = Mathf.Clamp01(t);
+            this.progress += Time.deltaTime / this.queueEndTime;
+        }
 
-                group.Update(t);
+        using (Draw.Command(cam))
+        {
+            foreach (var anim in this.animations)
+            {
+                if (anim is Animation animation)
+                {
+                    float t = Mathf.InverseLerp(animation.NormalizedStart, animation.NormalizedEnd, this.progress);
+                    t = Mathf.Clamp01(t);
+                    animation.onUpdate?.Invoke(animation.Easing(t));
+                }
+                else if (anim is AnimationGroup group)
+                {
+                    float t = Mathf.InverseLerp(group.NormalizedStart, group.NormalizedEnd, this.progress);
+                    t = Mathf.Clamp01(t);
+
+                    group.Update(t);
+                }
             }
         }
     }
