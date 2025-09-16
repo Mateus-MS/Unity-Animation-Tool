@@ -68,6 +68,10 @@ public class Timeline : ImmediateModeShapeDrawer
             a.NormalizedEnd = a.End / this.queueEndTime;
         }
     }
+    public void Awake()
+    {
+        this.progress = 0f;
+    }
 
     public override void DrawShapes(Camera cam)
     {
@@ -80,17 +84,19 @@ public class Timeline : ImmediateModeShapeDrawer
         {
             foreach (var anim in this.animations)
             {
+                float t = Mathf.InverseLerp(anim.NormalizedStart, anim.NormalizedEnd, this.progress);
+                t = Mathf.Clamp01(t);
+
+                // TODO: For now this is to prevent all animations to render it's initial state since the beginning
+                // But it can be a usefull feature to have
+                if (t == 0) return;
+
                 if (anim is Animation animation)
                 {
-                    float t = Mathf.InverseLerp(animation.NormalizedStart, animation.NormalizedEnd, this.progress);
-                    t = Mathf.Clamp01(t);
                     animation.onUpdate?.Invoke(animation.Easing(t));
                 }
                 else if (anim is AnimationGroup group)
                 {
-                    float t = Mathf.InverseLerp(group.NormalizedStart, group.NormalizedEnd, this.progress);
-                    t = Mathf.Clamp01(t);
-
                     group.Update(t);
                 }
             }
