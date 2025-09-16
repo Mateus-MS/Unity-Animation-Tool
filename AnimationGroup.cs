@@ -5,7 +5,8 @@ using System.Collections.Generic;
 
 public class AnimationGroup : ITimelineItem
 {
-    public TimelineMode Mode { get; set; }
+    public TimelineMode TimelineMode { get; set; }
+    public VisibillityMode VisibillityMode { get; set; } = VisibillityMode.Always;
     public float TriggerPercentage { get; set; }
     public float Start { get; set; } = 0f;
     public float Duration { get; set; }
@@ -16,9 +17,9 @@ public class AnimationGroup : ITimelineItem
 
     public List<Animation> animations = new List<Animation>();
 
-    public AnimationGroup(TimelineMode mode = TimelineMode.Instant, float triggerPercentage = .1f, Func<float, float> easing = null)
+    public AnimationGroup(TimelineMode timelineMode = TimelineMode.Instant, float triggerPercentage = .1f, Func<float, float> easing = null)
     {
-        this.Mode = mode;
+        this.TimelineMode = timelineMode;
         this.TriggerPercentage = triggerPercentage;
         this.Easing = easing ?? (x => x);
     }
@@ -28,11 +29,11 @@ public class AnimationGroup : ITimelineItem
         // Prevent the first animation to be a "OnPercentage"
         if (this.animations.Count == 0)
         {
-            animation.Mode = TimelineMode.Instant;
+            animation.TimelineMode = TimelineMode.Instant;
         }
 
 
-        switch (animation.Mode)
+        switch (animation.TimelineMode)
         {
             case TimelineMode.Instant:
                 if (animation.Duration > this.Duration)

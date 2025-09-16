@@ -42,10 +42,10 @@ public class Timeline : ImmediateModeShapeDrawer
         // Prevent the first animation to be a "OnPercentage"
         if (timeline.animations.Count == 0)
         {
-            anim.Mode = TimelineMode.Instant;
+            anim.TimelineMode = TimelineMode.Instant;
         }
 
-        switch (anim.Mode)
+        switch (anim.TimelineMode)
         {
             case TimelineMode.Instant:
                 // Timeline duration calculation
@@ -108,9 +108,15 @@ public class Timeline : ImmediateModeShapeDrawer
                 float t = Mathf.InverseLerp(anim.NormalizedStart, anim.NormalizedEnd, this.progress);
                 t = Mathf.Clamp01(t);
 
-                // TODO: For now this is to prevent all animations to render it's initial state since the beginning
-                // But it can be a usefull feature to have
-                if (t == 0) return;
+                switch (anim.VisibillityMode)
+                {
+                    case VisibillityMode.AppearOnPlay:
+                        if (t == 0) return;
+                        break;
+                    case VisibillityMode.HideOnFinish:
+                        if (t == 1) return;
+                        break;
+                }
 
                 if (anim is Animation animation)
                 {
@@ -124,4 +130,11 @@ public class Timeline : ImmediateModeShapeDrawer
         }
     }
 
+}
+
+public enum TimelineMode
+{
+    Instant,    
+    OnQueue,    
+    OnPercentage
 }

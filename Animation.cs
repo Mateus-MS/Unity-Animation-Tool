@@ -8,7 +8,8 @@ public class Animation : ITimelineItem
     public Action<float> onUpdate;
     public Func<float, float> Easing { get; set; }
 
-    public TimelineMode Mode { get; set; }
+    public TimelineMode TimelineMode { get; set; }
+    public VisibillityMode VisibillityMode { get; set; } = VisibillityMode.Always;
     public float TriggerPercentage { get; set; }
     public float Start { get; set; } = 0f;
     public float Duration { get; set; }
@@ -19,13 +20,15 @@ public class Animation : ITimelineItem
     public Animation(
         Action<float> onUpdate,
         float duration,
-        TimelineMode mode = TimelineMode.Instant,
+        VisibillityMode visibillityMode = VisibillityMode.Always,
+        TimelineMode timelineMode = TimelineMode.Instant,
         float triggerPercentage = .1f,
         Func<float, float> easing = null)
     {
         this.onUpdate = onUpdate;
-        Duration = duration;
-        Mode = mode;
+        this.Duration = duration;
+        this.TimelineMode = timelineMode;
+        this.VisibillityMode = visibillityMode;
         this.TriggerPercentage = triggerPercentage;
         this.Easing = easing ?? (x => x);
     }
@@ -49,4 +52,8 @@ public class Animation : ITimelineItem
         };
     }
 
+    public void Play()
+    {
+        Timeline.Register(this);
+    }
 }
