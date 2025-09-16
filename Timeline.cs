@@ -32,9 +32,8 @@ public class Timeline : ImmediateModeShapeDrawer
                     this.queueEndTime = anim.Duration;
                 }
 
-                // Animation start/end calculation
                 anim.Start = 0f;
-                anim.End = anim.Start + anim.Duration;
+                anim.End = anim.Duration;
                 break;
 
             case TimelineMode.OnQueue:
