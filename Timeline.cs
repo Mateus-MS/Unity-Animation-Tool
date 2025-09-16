@@ -67,7 +67,7 @@ public class Timeline : MonoBehaviour
         }
     }
 
-    public void Update(Camera cam)
+    public void Update()
     {
         foreach (var anim in this.animations)
         {
@@ -75,14 +75,14 @@ public class Timeline : MonoBehaviour
             {
                 float t = Mathf.InverseLerp(animation.NormalizedStart, animation.NormalizedEnd, this.progress);
                 t = Mathf.Clamp01(t);
-                animation.onUpdateWithCam?.Invoke(animation.Easing(t), cam);
+                animation.onUpdate?.Invoke(animation.Easing(t));
             }
             else if (anim is AnimationGroup group)
             {
                 float t = Mathf.InverseLerp(group.NormalizedStart, group.NormalizedEnd, this.progress);
                 t = Mathf.Clamp01(t);
 
-                group.Update(t, cam);
+                group.Update(t);
             }
         }
     }

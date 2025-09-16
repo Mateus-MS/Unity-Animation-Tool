@@ -4,8 +4,7 @@ using UnityEngine.InputSystem;
 
 public class Animation : ITimelineItem
 {
-    // public Action<float> onUpdate;
-    public Action<float, Camera> onUpdate;
+    public Action<float> onUpdate;
     public Func<float, float> Easing { get; set; }
 
     public TimelineMode Mode { get; set; }
@@ -17,7 +16,7 @@ public class Animation : ITimelineItem
     public float NormalizedEnd { get; set; } = 0f;
 
     public Animation(
-        Action<float, Camera> onUpdate,
+        Action<float> onUpdate,
         float duration,
         TimelineMode mode = TimelineMode.Instant,
         float triggerPercentage = .1f,

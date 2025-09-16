@@ -28,7 +28,7 @@ public abstract class Drawer : ImmediateModeShapeDrawer
         {
             timeline.progress += Time.deltaTime / timeline.queueEndTime;
         } else {
-            timeline.Update(cam);
+            timeline.Update();
         }
 
 		using( Draw.Command( cam ) ){
