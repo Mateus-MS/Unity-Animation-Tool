@@ -15,10 +15,32 @@ public class Timeline : ImmediateModeShapeDrawer
     [HideInInspector]
     public float queueEndTime = 0f;
 
-    public void Register(ITimelineItem anim)
+    private static Timeline instance;
+    public static Timeline Instance
     {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindFirstObjectByType<Timeline>();
+
+                // Auto-create if none exists
+                if (instance == null)
+                {
+                    GameObject go = new GameObject("Timeline");
+                    instance = go.AddComponent<Timeline>();
+                }
+            }
+            return instance;
+        }
+    }
+
+    public static void Register(ITimelineItem anim)
+    {
+        Timeline timeline = Instance;
+
         // Prevent the first animation to be a "OnPercentage"
-        if (this.animations.Count == 0)
+        if (timeline.animations.Count == 0)
         {
             anim.Mode = TimelineMode.Instant;
         }
@@ -27,9 +49,9 @@ public class Timeline : ImmediateModeShapeDrawer
         {
             case TimelineMode.Instant:
                 // Timeline duration calculation
-                if (anim.Duration > this.queueEndTime)
+                if (anim.Duration > timeline.queueEndTime)
                 {
-                    this.queueEndTime = anim.Duration;
+                    timeline.queueEndTime = anim.Duration;
                 }
 
                 anim.Start = 0f;
@@ -38,20 +60,20 @@ public class Timeline : ImmediateModeShapeDrawer
 
             case TimelineMode.OnQueue:
                 // Timeline duration calculation
-                this.queueEndTime += anim.Duration;
+                timeline.queueEndTime += anim.Duration;
 
                 // Animation start/end calculation
-                float lastAnimationEnd = animations.Count > 0 ? animations[animations.Count - 1].End : 0f;
+                float lastAnimationEnd = timeline.animations.Count > 0 ? timeline.animations[timeline.animations.Count - 1].End : 0f;
 
                 anim.Start = lastAnimationEnd;
                 anim.End = anim.Start + anim.Duration;
                 break;
 
             case TimelineMode.OnPercentage:
-                ITimelineItem previous = this.animations[this.animations.Count - 1];
+                ITimelineItem previous = timeline.animations[timeline.animations.Count - 1];
 
                 // Timeline duration calculation
-                this.queueEndTime += previous.Duration * anim.TriggerPercentage;
+                timeline.queueEndTime += previous.Duration * anim.TriggerPercentage;
 
                 // Animation start/end calculation
                 anim.Start = previous.Start + previous.Duration * anim.TriggerPercentage;
@@ -59,12 +81,12 @@ public class Timeline : ImmediateModeShapeDrawer
                 break;
         }
 
-        this.animations.Add(anim);
+        timeline.animations.Add(anim);
 
-        foreach (var a in animations)
+        foreach (var a in timeline.animations)
         {
-            a.NormalizedStart = a.Start / this.queueEndTime;
-            a.NormalizedEnd = a.End / this.queueEndTime;
+            a.NormalizedStart = a.Start / timeline.queueEndTime;
+            a.NormalizedEnd = a.End / timeline.queueEndTime;
         }
     }
     public void Awake()
