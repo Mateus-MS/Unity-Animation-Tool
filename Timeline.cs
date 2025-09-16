@@ -31,6 +31,7 @@ public class Timeline : ImmediateModeShapeDrawer
                     instance = go.AddComponent<Timeline>();
                 }
             }
+
             return instance;
         }
     }

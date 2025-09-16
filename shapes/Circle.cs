@@ -17,26 +17,6 @@ public class Circle
         this.fillColor = fillColor;
 
         Animate = new Animator(this);
-
-        // In order to show this shape in the animation
-        // It gonna create an static animation
-        // It is really confuse and should be analyed any better solution
-        Timeline.Register(
-            new Animation(
-                (t) =>
-                {
-                    Draw.Disc(
-                        this.position,
-                        this.radius,
-                        this.fillColor
-                    );
-                },
-            0f,
-            timelineMode: TimelineMode.OnQueue,
-            visibillityMode: VisibillityMode.Always
-            )
-        );
-            
     }
 
     public class Animator
@@ -53,8 +33,8 @@ public class Circle
             float triggerPercentage = .15f,
             Func<float, float> easing = null,
 
-            float finalRadius = 3f,
-            float initialThickness = 1f,
+            float finalRadius = 2f,
+            float initialThickness = .5f,
             float finalThickness = 0f,
             Color color = default
         )
@@ -74,6 +54,7 @@ public class Circle
                 },
                 duration: duration,
                 timelineMode: timelineMode,
+                visibillityMode: VisibillityMode.AppearOnPlay,
                 triggerPercentage: triggerPercentage,
                 easing: easing
             );
