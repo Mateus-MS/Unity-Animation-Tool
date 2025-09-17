@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Shapes;
 
-public class Animation : ITimelineItem
+public class Animation : ITimelineAnimation
 {
     public Action<float> onUpdate;
     public Func<float, float> Easing { get; set; }
@@ -37,19 +37,6 @@ public class Animation : ITimelineItem
     {
         float t = Mathf.InverseLerp(Start, End, timelineProgress);
         return Mathf.Clamp01(Easing(t));
-    }
-
-    public static Action<float> RingFocus(Vector3 position, Color color, float initialRadius = 2f, float finalRadius = 3f, float initialThickness = 1f, float finalThickness = 0f)
-    {
-        return (t) =>
-        {
-            Draw.Ring(
-                position,
-                Mathf.Lerp(initialRadius, finalRadius, t),
-                Mathf.Lerp(initialThickness, finalThickness, t),
-                color
-            );
-        };
     }
 
     public void Play()

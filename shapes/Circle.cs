@@ -17,6 +17,19 @@ public class Circle
         this.fillColor = fillColor;
 
         Animate = new Animator(this);
+
+        Timeline.Register(
+            new Element(
+                (t)=>
+                {
+                    Draw.Disc(
+                        this.position,
+                        this.radius,
+                        this.fillColor
+                    );
+                }
+            )
+        );
     }
 
     public class Animator

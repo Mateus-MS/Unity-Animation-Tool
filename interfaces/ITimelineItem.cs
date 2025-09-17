@@ -10,13 +10,4 @@ public interface ITimelineItem
     float NormalizedStart { get; set; }
     float NormalizedEnd { get; set; }
     public float Duration { get; set; }
-    Func<float, float> Easing { get; set; }
-
-}
-
-public enum VisibillityMode
-{
-    Always,          // always visible
-    AppearOnPlay,    // only appears when animation starts
-    HideOnFinish     // disappears when animation ends
 }

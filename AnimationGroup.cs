@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-public class AnimationGroup : ITimelineItem
+public class AnimationGroup : ITimelineAnimation
 {
     public TimelineMode TimelineMode { get; set; }
     public VisibillityMode VisibillityMode { get; set; } = VisibillityMode.Always;

@@ -127,15 +127,13 @@ public class Timeline : ImmediateModeShapeDrawer
                 {
                     group.Update(t);
                 }
+                else if (anim is Element element)
+                {
+                    element.Render?.Invoke(t);
+                }
+
             }
         }
     }
 
-}
-
-public enum TimelineMode
-{
-    Instant,    
-    OnQueue,    
-    OnPercentage
 }
