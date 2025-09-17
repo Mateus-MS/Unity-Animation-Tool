@@ -1,10 +1,16 @@
+using System;
+
 public interface ITimelineElement
 {
-    float Start { get; set; }
-    float End { get; set; }
+    float start { get; set; }
+    float end { get; set; }
 
-    public float Duration { get; set; }
+    public float duration { get; set; }
 
-    float NormalizedStart { get; set; }
-    float NormalizedEnd { get; set; }
+    float normalizedStart { get; set; }
+    float normalizedEnd { get; set; }
+
+    Action<float> render { get; set; }
+    public Timeline.PlayMode playMode { get; set; }
+    public float triggerPercentage { get; set; }
 }

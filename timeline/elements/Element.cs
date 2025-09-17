@@ -1,15 +1,25 @@
+using System;
+
 public class Element : ITimelineElement
 {
-    public float Start { get; set; }
-    public float End { get; set; }
+    public float start { get; set; }
+    public float end { get; set; }
 
-    public float Duration { get; set; }
+    public float duration { get; set; }
 
-    public float NormalizedStart { get; set; }
-    public float NormalizedEnd { get; set; }
+    public float normalizedStart { get; set; }
+    public float normalizedEnd { get; set; }
 
-    public Element(float duration)
+    public Action<float> render { get; set; }
+    public Timeline.PlayMode playMode { get; set; }
+    public float triggerPercentage { get; set; }
+
+    public Element(Action<float> render, float duration, float triggerPercentage, Timeline.PlayMode playMode = Timeline.PlayMode.Instant)
     {
-        this.Duration = duration;
+        this.render = render;
+        this.duration = duration;
+
+        this.triggerPercentage = triggerPercentage;
+        this.playMode = playMode;
     }
 }
